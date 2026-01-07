@@ -1,24 +1,15 @@
+// App.js
 import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-
-
-import LoginScreen from './src/screens/LoginScreen'; 
+import { NavigationContainer } from '@react-navigation/native';
+import { GlobalProvider } from './src/context/GlobalContext'; // Nueva importación
+import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
   return (
-    //Prueba para ver la conexion con Laravel, pueden borrarlo luego
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      
-      <LoginScreen />
-      
-    </SafeAreaView>
+    <GlobalProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </GlobalProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff', 
-  },
-});
