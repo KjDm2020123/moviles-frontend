@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity,  TextInput, Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 export default function PerfilAlumnoScreen({ navigation, route }) {
   // Manejo SEGURO de parámetros
