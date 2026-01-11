@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Alert, FlatList, Modal, TextInput, Platform } from "react-native";
 import { useRoute } from '@react-navigation/native'; // Importamos useRoute
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreenAdmin({ route, navigation }) { // Eliminamos route de los parámetros
   //const route = useRoute(); // Obtenemos route usando el hook
@@ -107,6 +107,11 @@ const user = route?.params?.user ?? {
     }, 2000);
   };
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('userToken');
+    navigation.replace('Login');
+  };
+
   const handleQuickAction = (action) => {
     if (action.screen) {
       navigation.navigate(action.screen);
@@ -136,7 +141,7 @@ const user = route?.params?.user ?? {
     <View style={styles.header}>
       <View style={styles.userInfo}>
         <View style={styles.avatar}>
-          <Icon name="shield-account" size={30} color="#fff" />
+          <Text style={{ fontSize: 30, color: '#fff' }}>🛡️</Text>
         </View>
         <View style={styles.userDetails}>
           <Text style={styles.welcomeText}>Panel de Administración</Text>
@@ -146,7 +151,7 @@ const user = route?.params?.user ?? {
       </View>
       <View style={styles.headerActions}>
         <TouchableOpacity style={styles.headerButton}>
-          <Icon name="bell" size={24} color="#333" />
+          <Text style={{ fontSize: 24, color: '#333' }}>🔔</Text>
           <View style={styles.notificationBadge}>
             <Text style={styles.badgeText}>3</Text>
           </View>
@@ -155,7 +160,13 @@ const user = route?.params?.user ?? {
           style={styles.headerButton}
           onPress={() => navigation.navigate("Configuracion")}
         >
-          <Icon name="cog" size={24} color="#333" />
+          <Text style={{ fontSize: 24, color: '#333' }}>⚙️</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.logoutButton}
+          onPress={handleLogout}
+        >
+          <Text style={styles.logoutButtonText}>✕ Salir</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -166,7 +177,7 @@ const user = route?.params?.user ?? {
       <View style={styles.statRow}>
         <View style={[styles.statCard, getShadowStyle()]}>
           <View style={[styles.statIcon, { backgroundColor: '#E3F2FD' }]}>
-            <Icon name="account-school" size={24} color="#2196F3" />
+            <Text style={{ fontSize: 24, color: '#2196F3' }}>🎓</Text>
           </View>
           <Text style={styles.statValue}>{stats.totalAlumnos}</Text>
           <Text style={styles.statLabel}>Alumnos</Text>
@@ -174,7 +185,7 @@ const user = route?.params?.user ?? {
         
         <View style={[styles.statCard, getShadowStyle()]}>
           <View style={[styles.statIcon, { backgroundColor: '#E8F5E9' }]}>
-            <Icon name="teach" size={24} color="#4CAF50" />
+            <Text style={{ fontSize: 24, color: '#4CAF50' }}>👨‍🏫</Text>
           </View>
           <Text style={styles.statValue}>{stats.totalProfesores}</Text>
           <Text style={styles.statLabel}>Profesores</Text>
@@ -184,7 +195,7 @@ const user = route?.params?.user ?? {
       <View style={styles.statRow}>
         <View style={[styles.statCard, getShadowStyle()]}>
           <View style={[styles.statIcon, { backgroundColor: '#FFF3E0' }]}>
-            <Icon name="book-open" size={24} color="#FF9800" />
+            <Text style={{ fontSize: 24, color: '#FF9800' }}>📚</Text>
           </View>
           <Text style={styles.statValue}>{stats.totalMaterias}</Text>
           <Text style={styles.statLabel}>Materias</Text>
@@ -192,7 +203,7 @@ const user = route?.params?.user ?? {
         
         <View style={[styles.statCard, getShadowStyle()]}>
           <View style={[styles.statIcon, { backgroundColor: '#F3E5F5' }]}>
-            <Icon name="account-check" size={24} color="#9C27B0" />
+            <Text style={{ fontSize: 24, color: '#9C27B0' }}>✓</Text>
           </View>
           <Text style={styles.statValue}>{stats.usuariosActivos}</Text>
           <Text style={styles.statLabel}>Activos</Text>
@@ -212,7 +223,9 @@ const user = route?.params?.user ?? {
             onPress={() => handleQuickAction(action)}
           >
             <View style={[styles.actionIcon, { backgroundColor: action.color }]}>
-              <Icon name={action.icon} size={24} color="#fff" />
+              <Text style={{ fontSize: 24, color: '#fff' }}>
+                {action.id === 1 ? '👥' : action.id === 2 ? '📖' : action.id === 3 ? '👨‍👩‍👧‍👦' : action.id === 4 ? '📅' : action.id === 5 ? '📊' : '⚙️'}
+              </Text>
             </View>
             <Text style={styles.actionTitle}>{action.title}</Text>
             <Text style={styles.actionDescription}>{action.description}</Text>
@@ -240,13 +253,13 @@ const user = route?.params?.user ?? {
                          alert.level === 'warning' ? '#FF9800' : '#2196F3' }
           ]}
         >
-          <Icon 
-            name={alert.level === 'danger' ? "alert-circle" : 
-                  alert.level === 'warning' ? "alert" : "information"} 
-            size={20} 
-            color={alert.level === 'danger' ? "#F44336" : 
-                   alert.level === 'warning' ? "#FF9800" : "#2196F3"} 
-          />
+          <Text style={{ 
+            fontSize: 20,
+            color: alert.level === 'danger' ? "#F44336" : 
+                   alert.level === 'warning' ? "#FF9800" : "#2196F3"
+          }}>
+            {alert.level === 'danger' ? '🔴' : alert.level === 'warning' ? '⚠️' : 'ℹ️'}
+          </Text>
           <Text style={styles.alertMessage}>{alert.message}</Text>
         </View>
       ))}
@@ -272,15 +285,11 @@ const user = route?.params?.user ?? {
               activity.type === 'sistema' ? '#FFF3E0' : '#F3E5F5' 
             }
           ]}>
-            <Icon 
-              name={
-                activity.type === 'calificacion' ? "file-document" : 
-                activity.type === 'usuario' ? "account-plus" : 
-                activity.type === 'sistema' ? "backup-restore" : "account-edit"
-              } 
-              size={18} 
-              color="#666" 
-            />
+            <Text style={{ fontSize: 18, color: '#666' }}>
+              {activity.type === 'calificacion' ? '📄' : 
+               activity.type === 'usuario' ? '👤+' : 
+               activity.type === 'sistema' ? '💾' : '✏️'}
+            </Text>
           </View>
           <View style={styles.activityInfo}>
             <Text style={styles.activityUser}>{activity.user}</Text>
@@ -295,15 +304,15 @@ const user = route?.params?.user ?? {
   const renderSystemInfo = () => (
     <View style={styles.systemInfo}>
       <View style={styles.infoRow}>
-        <Icon name="server" size={16} color="#666" />
+        <Text style={{ fontSize: 16, color: '#666' }}>🖥️</Text>
         <Text style={styles.infoText}>Servidor: Online</Text>
       </View>
       <View style={styles.infoRow}>
-        <Icon name="database" size={16} color="#666" />
+        <Text style={{ fontSize: 16, color: '#666' }}>💾</Text>
         <Text style={styles.infoText}>Base de datos: 2.4 GB / 10 GB</Text>
       </View>
       <View style={styles.infoRow}>
-        <Icon name="security" size={16} color="#666" />
+        <Text style={{ fontSize: 16, color: '#666' }}>🔒</Text>
         <Text style={styles.infoText}>Último backup: Hoy 00:00</Text>
       </View>
     </View>
@@ -427,10 +436,29 @@ const styles = StyleSheet.create({
   },
   headerActions: {
     flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   headerButton: {
     padding: 10,
     position: "relative",
+  },
+  logoutButton: {
+    backgroundColor: '#F44336',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 3,
+    marginLeft: 8,
+  },
+  logoutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
   notificationBadge: {
     position: "absolute",

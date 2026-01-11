@@ -29,6 +29,13 @@ import PeriodosAcademicosScreen from "../screens/Admin/PeriodosAcademicosScreen"
 
 //Profesor
 import HomeProfesorScreen from "../screens/Profesor/HomeProfesorScreen";
+import TomarAsistenciaScreen from "../screens/Profesor/TomarAsistenciaScreen";
+import NuevaTareaScreen from "../screens/Profesor/NuevaTareaScreen";
+import CalificarTareasScreen from "../screens/Profesor/CalificarTareasScreen";
+import SubirCalificacionesScreen from "../screens/Profesor/SubirCalificacionesScreen";
+import EnviarComunicadoScreen from "../screens/Profesor/EnviarComunicadoScreen";
+import HorarioProfesorScreen from "../screens/Profesor/HorarioProfesorScreen";
+import ListaAlumnosScreen from "../screens/Profesor/ListaAlumnosScreen";
 
 
 
@@ -54,6 +61,13 @@ export default function AppNavigator() {
       
    {/* PROFESOR */}
    <Stack.Screen name="HomeProfesor" component={HomeProfesorScreen} />
+   <Stack.Screen name="TomarAsistencia" component={TomarAsistenciaScreen} />
+   <Stack.Screen name="NuevaTarea" component={NuevaTareaScreen} />
+   <Stack.Screen name="CalificarTareas" component={CalificarTareasScreen} />
+   <Stack.Screen name="SubirCalificaciones" component={SubirCalificacionesScreen} />
+   <Stack.Screen name="EnviarComunicado" component={EnviarComunicadoScreen} />
+   <Stack.Screen name="HorarioProfesor" component={HorarioProfesorScreen} />
+   <Stack.Screen name="ListaAlumnos" component={ListaAlumnosScreen} />
 
 
       {/* ADMIN */}
